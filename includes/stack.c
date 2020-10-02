@@ -62,7 +62,7 @@ lookup_result_t stack_pop(ptr_stack this) {
  * 
  * @return if the stack is empty
  * */
-inline bool stack_is_empty(ptr_stack this) {
+bool stack_is_empty(ptr_stack this) {
     return linked_list_is_empty(this->list);
 }
 
