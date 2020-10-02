@@ -19,7 +19,7 @@
         ptr_node_t head;
 
         //len is the list current lenght
-        size_t len;
+        int len;
 
     } linked_list_t;
 
@@ -54,14 +54,16 @@
     ptr_linked_list linked_list_map(ptr_linked_list this, callback fn);
     ptr_linked_list linked_list_filter(ptr_linked_list this, filter_callback fn);
 
-    bool linked_list_is_ok(lookup_result_t *result);
+    bool is_ok(lookup_result_t *result);
+    bool linked_list_is_empty(ptr_linked_list this);
+    
     bool linked_list_append(ptr_linked_list this, int data);
     bool linked_list_insert_at_head(ptr_linked_list this, int data);
-    bool linked_list_insert_at(ptr_linked_list this, int data, size_t index);
+    bool linked_list_insert_at(ptr_linked_list this, int data, int index);
 
-    lookup_result_t linked_list_remove_at(ptr_linked_list this, size_t index);
+    lookup_result_t linked_list_remove_at(ptr_linked_list this, int index);
     lookup_result_t linked_list_remove_last(ptr_linked_list this);
-    lookup_result_t linked_list_get(ptr_linked_list this, size_t index);
+    lookup_result_t linked_list_get(ptr_linked_list this, int index);
 
     void linked_list_print(ptr_linked_list this);
     void linked_list_free(ptr_linked_list this);

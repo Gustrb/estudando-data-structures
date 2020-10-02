@@ -16,7 +16,7 @@
  * 
  * @return if the list is empty
  * */
-static bool linked_list_is_empty(ptr_linked_list this) { return !this->head; }
+inline bool linked_list_is_empty(ptr_linked_list this) { return !this->head; }
 
 /**
  * linked_list_is_outside verifies if a given index is out of list bounds
@@ -28,10 +28,10 @@ static bool linked_list_is_empty(ptr_linked_list this) { return !this->head; }
  * 
  * @return if the index is out of this borders
  * */
-static bool linked_list_is_outside(ptr_linked_list this, size_t index) { return index > this->len || index < 0; }
+inline static bool linked_list_is_outside(ptr_linked_list this, int index) { return index > this->len || index < 0; }
 
 /**
- * linked_list_is_ok verifies if the given lookup_result have an status of ok, so its value should be considered
+ * is_ok verifies if the given lookup_result have an status of ok, so its value should be considered
  * 
  * @author Gustavo Reis Bauer
  * 
@@ -39,7 +39,7 @@ static bool linked_list_is_outside(ptr_linked_list this, size_t index) { return 
  * 
  * @return if the result is ok
  * */
-bool linked_list_is_ok(lookup_result_t *result) { return result->status == OK; }
+inline bool is_ok(lookup_result_t *result) { return result->status == OK; }
 
 /**
  * linked_list_new returns a heap allocated linked list
@@ -79,7 +79,7 @@ bool linked_list_append(ptr_linked_list this, int data) {
         return false;
     }
 
-    const ptr_node_t new_node = ALLOC(1, node_t);
+    ptr_node_t new_node = ALLOC(1, node_t);
 
     if(!new_node) {
         perror("Could not allocate enough memory to the node");
@@ -148,7 +148,7 @@ void linked_list_print(ptr_linked_list this) {
  * 
  * @return the removed value, if the list is invalid, the value of the status enum will say which error happened, the value should be considered only if the status value is ok
  * */
-lookup_result_t linked_list_remove_at(ptr_linked_list this, size_t index) {
+lookup_result_t linked_list_remove_at(ptr_linked_list this, int index) {
     lookup_result_t result;
 
     if(!this) {
@@ -166,8 +166,8 @@ lookup_result_t linked_list_remove_at(ptr_linked_list this, size_t index) {
     }
 
     if(index == HEAD_INDEX) {
-        const ptr_node_t aux = this->head;
-        const int data = this->head->data;
+        ptr_node_t aux = this->head;
+        int data = this->head->data;
 
         this->head = this->head->next;
         free(aux);
@@ -190,13 +190,13 @@ lookup_result_t linked_list_remove_at(ptr_linked_list this, size_t index) {
 
     trav->next = trav->next->next;
 
-    free(aux);
 
     this->len--;
 
     result.status = OK;
     result.value = data;
 
+    free(aux);
     return result;
 }
 
@@ -210,7 +210,7 @@ lookup_result_t linked_list_remove_at(ptr_linked_list this, size_t index) {
  * 
  * @return the value stored in the list index, if the status of the result is not OK then its value should not be considered
  * */
-lookup_result_t linked_list_get(ptr_linked_list this, size_t index) {
+lookup_result_t linked_list_get(ptr_linked_list this, int index) {
     lookup_result_t result;
 
     if(!this) {
@@ -323,7 +323,7 @@ bool linked_list_insert_at_head(ptr_linked_list this, int data) {
  * 
  * @return if the element was properly inserted
  * */
-bool linked_list_insert_at(ptr_linked_list this, int data, size_t index) {
+bool linked_list_insert_at(ptr_linked_list this, int data, int index) {
     if(index == HEAD_INDEX)
         return linked_list_insert_at_head(this, data);
 
@@ -393,7 +393,7 @@ ptr_linked_list linked_list_reverse(ptr_linked_list this) {
     for(int i = this->len - 1; i >= 0; i--) {
         lookup_result_t result = linked_list_get(this, i);
 
-        if(linked_list_is_ok(&result)) 
+        if(is_ok(&result)) 
             linked_list_append(reversed, result.value);
     }
 
@@ -426,7 +426,7 @@ ptr_linked_list linked_list_map(ptr_linked_list this, callback fn) {
     for(int i = 0; i < this->len; i++) {
         lookup_result_t result = linked_list_get(this, i);
 
-        if(linked_list_is_ok(&result))
+        if(is_ok(&result))
             linked_list_append(mapped_list, fn(result.value));
     }
 
@@ -459,7 +459,7 @@ ptr_linked_list linked_list_filter(ptr_linked_list this, filter_callback fn) {
     for(int i = 0; i < this->len; i++) {
         lookup_result_t result = linked_list_get(this, i);
 
-        if(linked_list_is_ok(&result)) {
+        if(is_ok(&result)) {
             if(!fn(result.value)) continue;
             
             linked_list_append(filtered, result.value);
